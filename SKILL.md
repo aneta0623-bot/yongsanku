@@ -1,102 +1,102 @@
 ---
-name: Zotero
-description: Use Zotero Desktop from Codex to enable/probe the local API, search a local Zotero library, list items/collections/tags, export BibTeX, insert citation keys into LaTeX or Markdown drafts, read indexed full text when requested, and import BibTeX/RIS records into Zotero through the connector server. Use when the user mentions Zotero, citations, references.bib, BibTeX export, local Zotero API, localhost:23119, or adding citations from a Zotero library.
+name: yongsan-family-restaurants
+description: 용산구 가족 점심 후보를 한식·중식·서양식 각 5곳씩 정리하고, 4인 예상 식비·추천 메뉴·주차·출처를 담은 한국어 정적 추천 웹페이지를 만들거나 갱신한다. 용산 맛집 조사, 가족 점심 추천, 새로 검색 버튼이 있는 맛집 사이트 제작·수정 요청에 사용한다. API 키나 외부 API·MCP 연결 없이 저장된 목록으로 작동하는 웹사이트가 기본이다.
 ---
 
-# Zotero
+# 용산 가족 점심 추천 웹
 
-Use this skill to operate a user's local Zotero Desktop library from Codex.
+기준 사이트: https://yongsan-food-finder.aneta0623.chatgpt.site/
 
-Core helper:
+가족이 용산구 점심 장소를 메뉴·비용·주차 기준으로 비교할 수 있게 자료를 정리하고 웹페이지에 담아라. SKILL.md는 에이전트의 작업 지침이며 웹사이트 실행 파일이 아니다. 실행 가능한 결과가 필요하면 HTML·CSS·JavaScript를 별도로 작성하라.
 
-```bash
-python3 <plugin-root>/skills/zotero/scripts/zotero.py <command>
+## 기본 조건
+
+- 지역: 서울 용산구. 같은 상호의 다른 지점과 혼동하지 말고 주소를 확인하라.
+- 인원: 4인 가족. 구성 미지정 시 식사량은 성인 4명 기준으로 계산하고 이를 표시하라.
+- 분류: 한식·중식·서양식 각 5곳, 총 15곳을 목표로 하라. 사용자 지정 조건을 우선하라.
+- 식사: 부담스럽지 않은 점심을 우선하라. 간단한 식사·나눔 메뉴·맵지 않은 선택지를 살피고, 고가 후보는 비용을 분명히 표시하라.
+- 자료: 조사 기준일 직전 약 3개월의 공개 블로그·SNS·방문 후기를 우선하라. 가격·주차·주소는 공식 매장 정보와 교차 확인하라.
+- 웹 동작: 준비된 목록을 브라우저에서 표시하고 순서를 다시 섞어라. 방문자에게 API 키 입력·계정 연결을 요구하지 마라.
+
+## 작업 순서
+
+1. 요청이 자료 조사, 웹 제작, 기존 목록 갱신 중 무엇인지 파악하라. 기존 사이트를 고칠 때는 구현과 저장된 데이터를 먼저 읽어라.
+2. 조사 기준일·기간·인원·분류를 정하라. 기존 자료를 재사용할 때는 원래 확인일을 유지하고, 재확인하지 않은 항목을 최신으로 바꾸지 마라.
+3. 새 자료가 필요한 경우 제작 시점에 이용 가능한 웹 검색·브라우징으로 직접 조사하라. 사이트 실행 중에는 외부 검색을 하지 마라. 접근할 수 없는 자료는 사용자 제공 자료로 보완하거나 미확인으로 표시하라.
+4. 식당별 위치·메뉴·가격·주차 근거를 정리하고 실제 주문 조합으로 4인 식비를 계산하라.
+5. 자료를 정적 데이터로 저장하고 카테고리별 결과 카드와 버튼을 구현하라.
+6. 파일과 변경 내용을 전달하라. 사용자가 GitHub 업로드나 배포를 요청했다면 지정된 저장소·사이트에 반영하고 실제 결과 링크를 반환하라.
+
+## 출처와 정보 품질
+
+- 식당마다 관련 출처 링크를 남겨라. 가능하면 최근 방문 후기와 공식 정보를 함께 확보하라.
+- 공개 게시일, 실제 방문일, 페이지 수정일, 조사자가 확인한 날짜를 구분하라. 페이지 확인일만으로 최근 3개월 게시물이라고 판단하지 마라.
+- 게시일을 모르면 “게시일 확인되지 않음”, 기간 밖이면 “조사 기간 밖 자료”라고 표시하라. 기간 내 근거가 부족한 후보는 “최근 근거 부족”으로 표시하라.
+- 인스타그램 비공개 게시물·로그인 제한·검색 제한이 있으면 접근한 것처럼 쓰지 마라. 직접 확인한 원문과 검색 결과 요약을 구분하라.
+- 광고·협찬·제휴 표기는 출처에서 확인했을 때 명시하라. 미확인인 경우 비협찬으로 단정하지 마라.
+- ‘최근 화제’는 기간 내 실제 게시물·보도가 있을 때만 사용하라. 목록 순서나 무작위 추천을 인기 순위로 표현하지 마라.
+- 공식 정보 페이지의 최근 수정일은 최신 방문 후기나 인기 증가의 근거가 아니다.
+- 근거 부족으로 개수가 모자라면 실제 확인한 개수를 표시하라. 상호·가격·날짜·출처를 만들어 15곳을 채우지 마라.
+- 대표 메뉴에 따라 분류하라. 퓨전·일식 등 경계에 있는 후보는 성격을 설명하고 다른 분류인 것처럼 단정하지 마라.
+
+## 식당별 필수 정보
+
+| 항목 | 기록 기준 |
+|---|---|
+| 식당·위치 | 상호, 정확한 지점, 동네 또는 주소 |
+| 음식 분류 | 한식·중식·서양식 또는 사용자가 지정한 분류 |
+| 추천 메뉴 | 점심에 맞는 메뉴와 공유하기 쉬운 주문 조합 |
+| 4인 예상액 | 메뉴별 단가 × 수량의 합계 또는 근거 있는 추정 범위 |
+| 주차 | 전용, 제휴·몰, 인근 공영·유료, 확인되지 않음 중 실제 확인한 내용 |
+| 가족 참고 | 매운맛·나눠 먹기·좌석·유아의자 등 확인된 특징과 메뉴 구성상 판단을 구분 |
+| 근거 | 관련 페이지 링크, 게시일·방문일·확인일, 협찬 여부 |
+| 한계 | 오래된 가격, 미확인 주차, 최근 자료 부족 등 |
+
+### 예산 계산
+
+- 기본은 식사 메뉴의 4인 총액이다. 주류·추가 음료·주차료는 별도라고 표시하라.
+- 개별 식사는 1인 메뉴 4개, 공유 식사는 실제 4명이 먹을 수 있는 주문 조합으로 계산하라. 2인 세트는 구성 확인 후 2세트로 계산하라.
+- 추천 메뉴와 합계의 주문 구성을 일치시켜라. 사이드 포함 여부를 분명히 밝혀라.
+- 단가가 불완전하면 “추정”과 계산 가정을 적어라. 근거가 전혀 없으면 “가격 확인 필요”로 두고 임의의 정확한 금액을 쓰지 마라.
+- 최신 공식 메뉴를 우선하되 확인한 날짜를 남겨라. 예전 후기 가격을 현재 가격으로 단정하지 마라.
+
+### 주차 표시
+
+- 주차 가능, 무료 주차, 할인 조건을 각각 확인하라. 몰 주차 가능을 매장 무료 주차로 바꾸지 마라.
+- 무료 시간·요금·차량 제한은 확인한 출처가 있을 때만 표시하라.
+- 인근 주차장은 식당 전용 주차와 구분하라. 구체적인 인근 주차장도 실제 확인한 경우에만 추천하라.
+- 정보가 없으면 “전용 주차 확인되지 않음”으로 표시하라. 정보 부재를 “주차 불가”로 단정하지 마라.
+
+## 정적 데이터와 갱신
+
+기존 구현을 수정할 때는 데이터 필드와 렌더링 구조를 유지하면서 필요한 정보를 보완하라. 기준 사이트의 필드는 다음과 같다.
+
+```text
+category, name, neighborhood, recommendedMenu,
+fourPersonEstimate, parking, recentEvidence,
+familyNote, disclosure,
+sources: [{title, url, publishedDate}]
 ```
 
-Resolve `<plugin-root>` by going two directories up from this `SKILL.md` file.
+필요하면 주문 수량·단가, 실제 주소, 확인일, 날짜 유형을 별도 필드로 추가하라. `publishedDate`에 확인일을 넣어야 하는 기존 구조에서는 화면에 “페이지 확인일”이라고 명시하라. 갱신일은 실제로 자료를 재확인한 때에만 변경하라.
 
-The helper is stdlib-only and follows the repo convention of running plugin Python helpers with `python3` / `#!/usr/bin/env python3`; it does not require Codex-specific runtime discovery.
+## 웹페이지 구현
 
-## Fast starts
+- 한국어 페이지 제목과 안내, 눈에 잘 띄는 “새로 검색” 버튼, 분류별 결과 카드, 출처 링크를 제공하라.
+- 버튼 옆에 “저장된 추천 목록의 순서를 다시 섞어 보여드려요”라고 설명하라. 버튼 클릭을 자료 갱신이나 실시간 인터넷 검색으로 표현하지 마라.
+- 준비된 목록을 복사해 Fisher–Yates 방식으로 섞고 분류별 최대 5곳을 표시하라. 기존 15곳만 있으면 바뀌는 것은 표시 순서다. 이 사실을 숨기지 마라.
+- 최초 화면부터 결과를 보여주고, 버튼 클릭 후에도 메뉴·4인 비용·주차·근거를 읽을 수 있게 하라.
+- 자료 기준일과 실제 표시 개수를 화면에 표시하라. 방문 날짜나 버튼 누른 날짜를 자료 조사일로 사용하지 마라.
+- 식당명·위치·4인 금액을 카드 상단에, 메뉴·주차·출처·불확실성을 그 아래에 배치하라.
+- 모바일에서는 한 열, 넓은 화면에서는 두 열로 배치하라. 큰 버튼, 충분한 글자 대비, 키보드 포커스, 시맨틱 제목 구조를 사용하라.
+- 라이브러리·원격 폰트·지도·SNS 임베드 없이 기본 HTML·CSS·JavaScript로 구현하라. 출처는 방문자가 눌러 여는 일반 링크로 제공하라.
+- 자료 문자열은 안전하게 이스케이프하거나 `textContent`로 넣어라. 출처 URL은 `https` 또는 `http`만 허용하고 새 창 링크에는 `rel="noopener noreferrer"`를 적용하라.
+- 독립 파일을 요청하면 데이터·스타일·스크립트를 포함한 `index.html`을 제공하라. 기존 호스팅 구조가 있으면 그 구조에 맞춰 구현하라.
+- 외부 API 호출, MCP 서버, API 키, 로그인, 자동 수집 서버를 추가하지 마라. 새 자료는 제작자가 다시 조사해 저장된 데이터를 수정하고 배포할 때 반영된다.
 
-Check readiness in one command:
+## 전달 방식
 
-```bash
-python3 <plugin-root>/skills/zotero/scripts/zotero.py status --json
-```
-
-Enable the local API and restart Zotero if needed:
-
-```bash
-python3 <plugin-root>/skills/zotero/scripts/zotero.py enable --restart
-```
-
-Search and export citation data:
-
-```bash
-python3 <plugin-root>/skills/zotero/scripts/zotero.py search "transformer" --json
-python3 <plugin-root>/skills/zotero/scripts/zotero.py export-bibtex --out references.bib
-```
-
-Insert a citation from Zotero into a draft and keep `references.bib` in sync:
-
-```bash
-python3 <plugin-root>/skills/zotero/scripts/zotero.py cite --query "Attention Is All You Need" --tex paper.tex --bib references.bib --marker '<cite>'
-```
-
-## Workflow
-
-1. Start with `status --json`. Do not rediscover prefs, ports, or profile paths manually unless the helper fails.
-2. If `local_api_enabled_pref` is false, run `enable --restart` when the user asked you to operate Zotero. This updates Zotero's local preference and restarts Zotero so port `23119` comes up.
-3. Use read-only local API commands for normal work:
-   - `inventory` for item/collection/tag summaries.
-   - `search <query>` for papers/items.
-   - `export-bibtex` or `sync-bib` for `.bib` files.
-   - `cite` for inserting a citation into a draft.
-4. Only retrieve attachment file URLs or full text when the user asks for PDFs, attachment paths, or full-text content.
-5. Treat Zotero library writes as explicit write actions. Before `import-bibtex`, `import-ris`, or connector save commands, confirm the exact record/source and destination unless the user's prompt already explicitly asked to add/import it.
-
-## Common commands
-
-```bash
-# Readiness and route map
-python3 <plugin-root>/skills/zotero/scripts/zotero.py status --json
-python3 <plugin-root>/skills/zotero/scripts/zotero.py probe --json
-
-# Library inventory
-python3 <plugin-root>/skills/zotero/scripts/zotero.py inventory
-python3 <plugin-root>/skills/zotero/scripts/zotero.py collections
-python3 <plugin-root>/skills/zotero/scripts/zotero.py tags
-
-# Search and export
-python3 <plugin-root>/skills/zotero/scripts/zotero.py search "BERT"
-python3 <plugin-root>/skills/zotero/scripts/zotero.py export-bibtex --out references.bib
-python3 <plugin-root>/skills/zotero/scripts/zotero.py export-bibtex --item-key PXW99EKT
-python3 <plugin-root>/skills/zotero/scripts/zotero.py citations --style apa --json
-
-# Draft editing
-python3 <plugin-root>/skills/zotero/scripts/zotero.py cite --item-key PXW99EKT --tex paper.tex --bib references.bib --marker '<cite>'
-python3 <plugin-root>/skills/zotero/scripts/zotero.py cite --query "BERT" --markdown notes.md --bib references.bib --marker '<cite>'
-
-# Attachments and full text; use only on request
-python3 <plugin-root>/skills/zotero/scripts/zotero.py children PXW99EKT --json
-python3 <plugin-root>/skills/zotero/scripts/zotero.py fulltext 2JAZS9U8 --out attention-fulltext.txt
-python3 <plugin-root>/skills/zotero/scripts/zotero.py file-url 2JAZS9U8
-
-# Writes to Zotero; confirm first unless explicitly requested
-python3 <plugin-root>/skills/zotero/scripts/zotero.py selected-target --json
-python3 <plugin-root>/skills/zotero/scripts/zotero.py import-bibtex --file new-reference.bib --yes
-python3 <plugin-root>/skills/zotero/scripts/zotero.py import-ris --file new-reference.ris --yes
-```
-
-## Output standards
-
-- For inventory/search, return title, creators, year, Zotero item key, and BibTeX key when available.
-- Explain the two-key distinction when relevant: Zotero item keys like `PXW99EKT` are not the same as exported BibTeX keys like `vaswani_attention_2023`.
-- For `.bib` export, return the absolute output path and entry count.
-- For draft citation insertion, report the edited file, inserted citation key, and updated `.bib` path.
-- For blockers, name the exact gate: Zotero app missing, local API disabled, port closed, connector unavailable, no matching item, or write not confirmed.
-
-## Route details
-
-Read `references/local-api-routes.md` only when you need endpoint details beyond the helper commands.
+- 조사만 요청한 경우에는 기준일·인원과 함께 분류별 표 및 출처를 제공하라.
+- 웹 제작 시에는 바로 열 수 있는 파일 또는 배포된 사이트 주소를 제공하라. 요청된 범위에서 구현 내용을 설명하라.
+- GitHub 업로드 시 대상 저장소를 확인하고 요청된 파일을 커밋하라. SKILL.md 업로드가 사이트를 자동으로 배포하거나 실행하지는 않는다는 점을 짧게 설명하라.
+- 완료 보고에는 파일·사이트 링크, 변경 요약, 확인한 범위와 남은 한계를 적어라. 실행이나 배포를 확인하지 않았다면 완료했다고 말하지 마라.
